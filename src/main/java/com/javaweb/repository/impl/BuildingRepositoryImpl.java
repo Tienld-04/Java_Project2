@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -64,12 +65,12 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			sql.append(" inner join renttype on renttype.id = buildingrenttype.renttypeid ");
 		}
 		
-		String rentAreaTo = (String)params.get("areaTo");
-		String rentAreaFrom = (String)params.get("areaFrom");
-		
-		if(StringUtil.checkString(rentAreaTo) == true || StringUtil.checkString(rentAreaFrom) == true){
-			sql.append(" inner join rentarea on rentarea.buildingid = b.id ");
-		}
+//		String rentAreaTo = (String)params.get("areaTo");
+//		String rentAreaFrom = (String)params.get("areaFrom");
+//		
+//		if(StringUtil.checkString(rentAreaTo) == true || StringUtil.checkString(rentAreaFrom) == true){
+//			sql.append(" inner join rentarea on rentarea.buildingid = b.id ");
+//		}
 	}
 	public static void queryNomal(Map<String, Object> params, StringBuilder where) {
 		for(Map.Entry<String, Object> it : params.entrySet()) {
@@ -94,13 +95,16 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		String rentAreaTo = (String)params.get("areaTo");
 		String rentAreaFrom = (String)params.get("areaFrom");
 		if(StringUtil.checkString(rentAreaTo) == true || StringUtil.checkString(rentAreaFrom) == true){
+			where.append(" and exists (select * from rentarea r where b.id = r.buildingid ");
 			if(StringUtil.checkString(rentAreaFrom) == true) {
-				where.append(" and rentarea.value >= " + rentAreaFrom);
+				where.append(" and r.value >= " + rentAreaFrom);
 				
 			}
 			if(StringUtil.checkString(rentAreaTo)) {
-				where.append(" and rentarea.value <= " + rentAreaTo);
+				where.append(" and r.value <= " + rentAreaTo);
 			}
+			where.append(") ");
+			
 		}
 		String rentPriceTo = (String)params.get("rentPriceTo");
 		String rentPriceFrom = (String)params.get("rentPriceFrom");
@@ -113,14 +117,22 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				where.append(" and b.rentprice <= " + rentPriceTo);
 			}
 		}
+		//java7
+//		if(typeCode != null && typeCode.size() != 0) {
+//			//where.append(" and renttype.code in('" + String.join(",", typeCode) + "')" );
+//			List<String> code = new ArrayList<>();
+//			for(String item : typeCode) {
+//				code.add("'"+ item + "'");
+//			}
+//			where.append(" and renttype.code in(" + String.join(",", code) + ") ");
+//			
+//		}
+		//java8
 		if(typeCode != null && typeCode.size() != 0) {
-			//where.append(" and renttype.code in('" + String.join(",", typeCode) + "')" );
-			List<String> code = new ArrayList<>();
-			for(String item : typeCode) {
-				code.add("'"+ item + "'");
-			}
-			where.append(" and renttype.code in(" + String.join(",", code) + ") ");
-			
+			where.append(" and(");
+			String sql = typeCode.stream().map(it-> "renttype.code Like" + "'%"+ it + "%'").collect(Collectors.joining(" or "));
+			where.append(sql);
+			where.append(" ) ");
 		}
 	}
 	
