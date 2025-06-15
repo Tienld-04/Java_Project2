@@ -1,4 +1,4 @@
-package com.javaweb.CustomeException;
+package com.javaweb.customeException;
 
 public class FieldRequiredException extends RuntimeException{
 

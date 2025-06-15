@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.javaweb.CustomeException.FieldRequiredException;
+import com.javaweb.customeException.FieldRequiredException;
 import com.javaweb.model.ErrorResponeDTO;
 
 @ControllerAdvice //bộ xử lý ngoại lệ toàn cục cho project 
