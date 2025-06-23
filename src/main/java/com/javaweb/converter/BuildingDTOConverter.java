@@ -16,22 +16,23 @@ import com.javaweb.repository.entity.RentAreaEntity;
 
 @Component
 public class BuildingDTOConverter {
-	@Autowired
-	private DistrictRepository districtRepository;
-	
-	@Autowired
-	private RentAreaRepository rentAreaRepository;
-	
+//	@Autowired
+//	private DistrictRepository districtRepository;
+//	
+//	@Autowired
+//	private RentAreaRepository rentAreaRepository;
+//	
 	@Autowired
 	private ModelMapper modelMapper;
 	
 	public BuildingDTO toBuildingDTO(BuildingEntity item) {
 		BuildingDTO building = modelMapper.map(item, BuildingDTO.class);
-		DistrictEntity districtEntity = districtRepository.findNameById(item.getDistrictid());
-		building.setAddress(item.getStreet()+","+item.getWard()+","+districtEntity.getName() );
-		
-		List<RentAreaEntity> rentAreas = rentAreaRepository.getValueByBuildingId(item.getId());
-		String listRentArea = rentAreas.stream().map(it -> it.getValue().toString()).collect(Collectors.joining(","));
+		//DistrictEntity districtEntity = districtRepository.findNameById(item.getDistrictid());
+		//DistrictEntity districtEntity = districtRepository.findNameById(item.getDistrictid());
+//		building.setAddress(item.getStreet()+","+item.getWard()+","+districtEntity.getName() );
+		building.setAddress(item.getStreet()+","+item.getWard()+","+item.getDistrict().getName() );
+		//List<RentAreaEntity> rentAreas = rentAreaRepository.getValueByBuildingId(item.getId());
+		String listRentArea = item.getAreaEntities().stream().map(it -> it.getValue().toString()).collect(Collectors.joining(","));
 		building.setRentArea(listRentArea);
 		return building;
 	}

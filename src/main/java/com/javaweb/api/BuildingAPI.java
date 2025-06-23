@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +24,14 @@ import com.javaweb.service.BuildingService;
 //Requet : từ client gửi tới server
 //Responbody : từ server trả về client : chuyển data bean -> json
 @RestController
+@PropertySource("classpath:application.properties")
 public class BuildingAPI {
 	
 	@Autowired
 	private BuildingService buildingService;
 	
+	@Value("${dev.Tienld}")
+	private String data;
 //	@GetMapping("/test")
 //    public String hello(){
 //        return "hello";
@@ -108,10 +113,13 @@ public class BuildingAPI {
 ////	
 	//@PathVariable là một annotation được sử dụng để trích xuất giá trị từ các tham số trong đường dẫn URL (URI path) của một yêu cầu HTTP. 
 	//Nó thường được dùng trong các phương thức xử lý yêu cầu (controller methods) để ánh xạ các biến trong đường dẫn đến các tham số của phương thức
-	@DeleteMapping("api/building/{id}/{name}")
-	public void deleteBuilding(@PathVariable Integer id, @PathVariable String name,
-			@RequestParam(value = "ward", required = false) String ward) {
-		System.out.println("Đã xóa tòa nhà id = "+ id + " "+name);
+	@DeleteMapping("api/building/{id}")
+	public void deleteBuilding(@PathVariable Integer id
+//			, @PathVariable String name,
+//			@RequestParam(value = "ward", required = false) String ward
+			) {
+//		System.out.println("Đã xóa tòa nhà id = "+ id + " "+name);
+		System.out.println(data);
 	}
 	
 	
