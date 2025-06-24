@@ -70,7 +70,7 @@ public class BuildingEntity {
 	public DistrictEntity getDistrict() {
 		return district;
 	}
-	public void setDistrictEntity(DistrictEntity district) {
+	public void setDistrict(DistrictEntity district) {
 		this.district = district;
 	}
 	

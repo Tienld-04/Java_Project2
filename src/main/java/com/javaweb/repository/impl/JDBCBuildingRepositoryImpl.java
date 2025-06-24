@@ -214,4 +214,19 @@ public class JDBCBuildingRepositoryImpl implements BuildingRepository {
 			}
 			return result;
 	}
+	@Override
+	public void saveBuilding(BuildingEntity buildingEntity) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void saveUpdateBuilding(BuildingEntity buildingEntity) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void deleteBuildingRepo(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
 }

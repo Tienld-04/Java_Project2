@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +14,10 @@ import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.BuildingDTOConverter;
 import com.javaweb.converter.BuildingSearchBuilderConverter;
 import com.javaweb.model.BuildingDTO;
+import com.javaweb.model.BuildingRequestDTO;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.entity.BuildingEntity;
+import com.javaweb.repository.entity.DistrictEntity;
 import com.javaweb.service.BuildingService;
 
 @Service
@@ -54,6 +58,38 @@ public class BuildingServiceImpl implements BuildingService {
 		}
 		
 		return result;		
+	}
+	
+	@Override
+	@Transactional
+	public void creatBuilding(BuildingRequestDTO buildingRequestDTO) {
+		BuildingEntity buildingEntity = new BuildingEntity();
+		buildingEntity.setName(buildingRequestDTO.getName());
+		buildingEntity.setWard(buildingRequestDTO.getWard());
+		buildingEntity.setStreet(buildingRequestDTO.getStreet());
+		DistrictEntity districtEntity = new DistrictEntity();
+		districtEntity.setId(buildingRequestDTO.getDistrictid());
+		buildingEntity.setDistrict(districtEntity);
+		buildingRepository.saveBuilding(buildingEntity);
+	}
+	@Override
+	@Transactional
+	public void updateBuilding(BuildingRequestDTO buildingRequestDTO) {
+		BuildingEntity buildingEntity = new BuildingEntity();
+		buildingEntity.setId(buildingRequestDTO.getId());
+		buildingEntity.setName(buildingRequestDTO.getName());
+		buildingEntity.setWard(buildingRequestDTO.getWard());
+		buildingEntity.setStreet(buildingRequestDTO.getStreet());
+		DistrictEntity districtEntity = new DistrictEntity();
+		districtEntity.setId(buildingRequestDTO.getDistrictid());
+		buildingEntity.setDistrict(districtEntity);
+		buildingRepository.saveUpdateBuilding(buildingEntity);
+	}
+	
+	@Override
+	@Transactional
+	public void deleteBuilding(Long id) {
+		buildingRepository.deleteBuildingRepo(id);
 	}
 	
 }
