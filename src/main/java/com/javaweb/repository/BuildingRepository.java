@@ -12,7 +12,6 @@ public interface BuildingRepository {
 		List<BuildingEntity> findAlls(BuildingSearchBuilder buildingSearchBuilder);
 		void saveBuilding(BuildingEntity buildingEntity);
 		void saveUpdateBuilding(BuildingEntity buildingEntity);
-		//void deleteBuildingRepo(BuildingEntity buildingEntity, Integer id);
 		void deleteBuildingRepo(Long id);
 		
 		

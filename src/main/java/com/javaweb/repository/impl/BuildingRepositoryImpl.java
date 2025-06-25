@@ -38,7 +38,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 //		Query query = entityManager.createQuery(sql, BuildingEntity.class);
 		
 		//sql native
-		String sql = "select * from Building b where b.id = 1 ";
+		String sql = "select * from Building ";
 		Query query = entityManager.createNativeQuery(sql, BuildingEntity.class);
 		return query.getResultList();
 		

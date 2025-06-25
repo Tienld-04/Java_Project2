@@ -145,28 +145,12 @@ public class BuildingAPI {
 		return result;
 	}
 	
-	@PersistenceContext
-	private EntityManager entityManager;
-	
-	@PostMapping(value = "/api/buildings/")
-	@Transactional
-	public void creatBuilding(@RequestBody BuildingRequestDTO buildingRequestDTO) {
-		
-		BuildingEntity buildingEntity = new BuildingEntity();
-		buildingEntity.setName(buildingRequestDTO.getName());
-		buildingEntity.setWard(buildingRequestDTO.getWard());
-		buildingEntity.setStreet(buildingRequestDTO.getStreet());
-		DistrictEntity districtEntity = new DistrictEntity();
-		districtEntity.setId(buildingRequestDTO.getDistrictid());
-		buildingEntity.setDistrict(districtEntity);
-		entityManager.persist(buildingEntity);
-		System.out.println("done");
-	}
 	
 	@PostMapping(value = "/api/building2/")
 	public void creatBuildings(@RequestBody BuildingRequestDTO buildingRequestDTO) {
 			buildingService.creatBuilding(buildingRequestDTO);
 	}
+	
 	@PutMapping(value = "/api/building2/{id}")
 	public void updateBuilding(@PathVariable Long id, @RequestBody BuildingRequestDTO buildingRequestDTO) {
 		buildingRequestDTO.setId(id);

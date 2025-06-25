@@ -12,8 +12,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.activation.FileDataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +28,7 @@ import com.javaweb.utils.NumberUtil;
 import com.javaweb.utils.StringUtil;
 
 @Repository
+//@Primary
 @PropertySource("classpath:application.properties")
 public class JDBCBuildingRepositoryImpl implements BuildingRepository {
 	
@@ -36,6 +41,8 @@ public class JDBCBuildingRepositoryImpl implements BuildingRepository {
 	@Value("${spring.datasource.password}")
 	private String PASS;
 	
+	@PersistenceContext
+	private EntityManager entityManager;
 	@Override
 	public List<BuildingEntity> findAll(String name, Long districtId) {
 		//String sql = new String"Select * from building  where name like '%"+name+"%'";
@@ -185,34 +192,37 @@ public class JDBCBuildingRepositoryImpl implements BuildingRepository {
 		queySpecial(buildingSearchBuilder, where);
 		where.append(" group by b.id; ");
 		sql.append(where);
-		System.out.println(sql);
-		List<BuildingEntity> result = new ArrayList<>();
-		try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql.toString());
-				){
-				while(rs.next()) {
-					BuildingEntity buildingEntity = new BuildingEntity();
-					buildingEntity.setId(rs.getLong("b.id"));
-					buildingEntity.setName(rs.getString("b.name"));
-					buildingEntity.setStreet(rs.getString("b.street"));
-					buildingEntity.setWard(rs.getString("b.ward"));
-					buildingEntity.setNumberOfBasement(rs.getInt("b.numberofbasement"));
-					//buildingEntity.setDistrictid(rs.getLong("b.districtid"));
-					buildingEntity.setFloorArea(rs.getLong("b.floorarea"));
-					buildingEntity.setRentPrice(rs.getLong("b.rentprice"));
-					buildingEntity.setServiceFee(rs.getString("b.servicefee"));
-					buildingEntity.setBrokerageFee(rs.getLong("b.brokeragefee"));
-					buildingEntity.setManagerName(rs.getString("b.managername"));
-					buildingEntity.setManagerPhoneNumber(rs.getString("b.managerphonenumber"));
-					result.add(buildingEntity);
-				}
-			}catch (SQLException e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				System.out.println("conn db failed");
-			}
-			return result;
+		Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+		
+		return query.getResultList();
+//		System.out.println(sql);
+//		List<BuildingEntity> result = new ArrayList<>();
+//		try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+//				Statement stmt = conn.createStatement();
+//				ResultSet rs = stmt.executeQuery(sql.toString());
+//				){
+//				while(rs.next()) {
+//					BuildingEntity buildingEntity = new BuildingEntity();
+//					buildingEntity.setId(rs.getLong("b.id"));
+//					buildingEntity.setName(rs.getString("b.name"));
+//					buildingEntity.setStreet(rs.getString("b.street"));
+//					buildingEntity.setWard(rs.getString("b.ward"));
+//					buildingEntity.setNumberOfBasement(rs.getInt("b.numberofbasement"));
+//					//buildingEntity.setDistrictid(rs.getLong("b.districtid"));
+//					buildingEntity.setFloorArea(rs.getLong("b.floorarea"));
+//					buildingEntity.setRentPrice(rs.getLong("b.rentprice"));
+//					buildingEntity.setServiceFee(rs.getString("b.servicefee"));
+//					buildingEntity.setBrokerageFee(rs.getLong("b.brokeragefee"));
+//					buildingEntity.setManagerName(rs.getString("b.managername"));
+//					buildingEntity.setManagerPhoneNumber(rs.getString("b.managerphonenumber"));
+//					result.add(buildingEntity);
+//				}
+//			}catch (SQLException e) {
+//				// TODO: handle exception
+//				e.printStackTrace();
+//				System.out.println("conn db failed");
+//			}
+//			return result;
 	}
 	@Override
 	public void saveBuilding(BuildingEntity buildingEntity) {
