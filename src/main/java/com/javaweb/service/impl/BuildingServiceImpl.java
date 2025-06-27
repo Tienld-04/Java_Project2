@@ -115,6 +115,18 @@ public class BuildingServiceImpl implements BuildingService {
 		
 		return result;		
 	}
-	
-	
+	@Override
+	public BuildingDTO getBuildingById(Long id) {
+		BuildingEntity buildingEntity = buildingRepository.getOne(id);
+		BuildingDTO result = buildingDTOConverter.toBuildingDTO(buildingEntity);
+		return result;
+		
+	}
+
+	@Override
+	@Transactional
+	public void deleteBuildingByIds(Long[] ids) {
+		buildingRepository.deleteByIdIn(ids);
+		
+	}
 }

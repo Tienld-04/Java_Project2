@@ -19,10 +19,21 @@ public class BuildingAPI {
 		List<BuildingDTO> result = buildingService.getAllBuilding();
 		return result;
 	}
+	
+	@GetMapping("/api/building/{id}")
+	public BuildingDTO getBuilding(@PathVariable Long id) {
+		BuildingDTO buildingDTO = buildingService.getBuildingById(id);
+		return buildingDTO;
+	}
+	
 	@DeleteMapping(value = "/api/building/{id}")
-	public void deleteBuilding(@PathVariable Long id) {
+	public void deleteBuildingId(@PathVariable Long id) {
 		buildingService.deleteBuildingById(id);
 	}
 	
+	@DeleteMapping("/api/buildings/{ids}")
+	public void deleteBuildingIds(@PathVariable Long[] ids) {
+		buildingService.deleteBuildingByIds(ids);
+	}
 	
 }

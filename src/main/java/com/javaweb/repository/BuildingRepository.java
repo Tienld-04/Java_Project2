@@ -9,5 +9,5 @@ import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.repository.entity.BuildingEntity;
 
 public interface BuildingRepository extends JpaRepository<BuildingEntity, Long>{
-
+		void deleteByIdIn(Long[] ids);
 }

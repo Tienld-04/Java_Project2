@@ -14,6 +14,8 @@ public interface BuildingService {
 	
 	//using string data jpa 
 	void deleteBuildingById(Long id);
+	void deleteBuildingByIds(Long[] ids);
 	List<BuildingDTO> getAllBuilding();
+	BuildingDTO getBuildingById(Long id);
 
 }
