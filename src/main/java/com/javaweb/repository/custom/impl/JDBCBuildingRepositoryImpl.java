@@ -1,4 +1,4 @@
-package com.javaweb.repository.impl;
+package com.javaweb.repository.custom.impl;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
 import com.javaweb.builder.BuildingSearchBuilder;
-import com.javaweb.repository.BuildingRepository;
+import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.utils.NumberUtil;
 import com.javaweb.utils.StringUtil;
@@ -30,49 +30,47 @@ import com.javaweb.utils.StringUtil;
 @Repository
 //@Primary
 @PropertySource("classpath:application.properties")
-public class JDBCBuildingRepositoryImpl implements BuildingRepository {
-	
-	@Value("${spring.datasource.url}")
-	private String DB_URL;
-	
-	@Value("${spring.datasource.username}")
-	private String USER;
-	
-	@Value("${spring.datasource.password}")
-	private String PASS;
-	
-	@PersistenceContext
-	private EntityManager entityManager;
-	@Override
-	public List<BuildingEntity> findAll(String name, Long districtId) {
-		//String sql = new String"Select * from building  where name like '%"+name+"%'";
-		StringBuilder sql = new StringBuilder("Select * from building b where 1 = 1 ");
-		if(name != null && !name.isEmpty()) {
-			sql.append("and b.name like '%" + name + "%' ");
-		}
-		if(districtId != null ) {
-			sql.append("and b.districtid =" + districtId + " ");
-		}
-		List<BuildingEntity> result = new ArrayList<>();
-		try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql.toString());
-			){
-			while(rs.next()) {
-				BuildingEntity building = new BuildingEntity();
-				building.setName(rs.getString("name"));
-				building.setStreet(rs.getString("street"));
-				building.setWard(rs.getString("ward"));
-				building.setNumberOfBasement(rs.getInt("numberofbasement"));
-				result.add(building);
-			}
-		}catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			System.out.println("conn db failed");
-		}
-		return result;
-	}
+public class JDBCBuildingRepositoryImpl implements BuildingRepositoryCustom {
+//	
+//	@Value("${spring.datasource.url}")
+//	private String DB_URL;
+//	
+//	@Value("${spring.datasource.username}")
+//	private String USER;
+//	
+//	@Value("${spring.datasource.password}")
+//	private String PASS;
+
+//	@Override
+//	public List<BuildingEntity> findAll(String name, Long districtId) {
+//		//String sql = new String"Select * from building  where name like '%"+name+"%'";
+//		StringBuilder sql = new StringBuilder("Select * from building b where 1 = 1 ");
+//		if(name != null && !name.isEmpty()) {
+//			sql.append("and b.name like '%" + name + "%' ");
+//		}
+//		if(districtId != null ) {
+//			sql.append("and b.districtid =" + districtId + " ");
+//		}
+//		List<BuildingEntity> result = new ArrayList<>();
+//		try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+//			Statement stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery(sql.toString());
+//			){
+//			while(rs.next()) {
+//				BuildingEntity building = new BuildingEntity();
+//				building.setName(rs.getString("name"));
+//				building.setStreet(rs.getString("street"));
+//				building.setWard(rs.getString("ward"));
+//				building.setNumberOfBasement(rs.getInt("numberofbasement"));
+//				result.add(building);
+//			}
+//		}catch (SQLException e) {
+//			// TODO: handle exception
+//			e.printStackTrace();
+//			System.out.println("conn db failed");
+//		}
+//		return result;
+//	}
 	//----------------------------------------------------------------------------------------------
 	public static void joinTable(BuildingSearchBuilder buildingSearchBuilder,  StringBuilder sql) {
 		//Long staffId = Long.parseLong(params.get("staffId").toString());
@@ -182,18 +180,21 @@ public class JDBCBuildingRepositoryImpl implements BuildingRepository {
 		}
 	}
 	
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+	
 	@Override
 	public List<BuildingEntity> findAlls(BuildingSearchBuilder buildingSearchBuilder) {
-		StringBuilder sql = new StringBuilder("Select b.id, b.name, b.districtid, b.street, b.ward,b.numberofbasement, b.floorarea,b.rentprice, "
-				+ " b.managername,b.managerphonenumber, b.servicefee, b.brokeragefee from building b");
+		StringBuilder sql = new StringBuilder("Select b.* from building b ");
 		joinTable(buildingSearchBuilder, sql);
 		StringBuilder where = new StringBuilder(" where 1=1 ");
 		queryNomal(buildingSearchBuilder, where);
 		queySpecial(buildingSearchBuilder, where);
 		where.append(" group by b.id; ");
 		sql.append(where);
-		Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 		
+		Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 		return query.getResultList();
 //		System.out.println(sql);
 //		List<BuildingEntity> result = new ArrayList<>();

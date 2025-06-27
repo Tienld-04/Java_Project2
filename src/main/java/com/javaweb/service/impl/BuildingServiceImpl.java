@@ -16,6 +16,7 @@ import com.javaweb.converter.BuildingSearchBuilderConverter;
 import com.javaweb.model.BuildingDTO;
 import com.javaweb.model.BuildingRequestDTO;
 import com.javaweb.repository.BuildingRepository;
+import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.entity.DistrictEntity;
 import com.javaweb.service.BuildingService;
@@ -24,7 +25,11 @@ import com.javaweb.service.BuildingService;
 public class BuildingServiceImpl implements BuildingService {
 	
 	@Autowired
+	private BuildingRepositoryCustom buildingRepositoryCustom;
+	
+	@Autowired
 	private BuildingRepository buildingRepository;
+	
 	
 	@Autowired
 	private BuildingDTOConverter buildingDTOConverter;
@@ -32,25 +37,26 @@ public class BuildingServiceImpl implements BuildingService {
 	@Autowired
 	private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
 	
-	@Override
-	public List<BuildingDTO> findAll(String name, Long districtId) {
-		
-		List<BuildingEntity> buildingEntities = buildingRepository.findAll(name, districtId);
-		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
-		for(BuildingEntity item : buildingEntities) {
-			BuildingDTO building = new BuildingDTO();
-			building.setName(item.getName());
-			building.setNumberOfBasement(item.getNumberOfBasement());
-			building.setAddress(item.getStreet()+" "+item.getWard());
-			result.add(building);
-		}
-		
-		return result;		
-	}
-	@Override
+//	@Override
+//	public List<BuildingDTO> findAll(String name, Long districtId) {
+//		
+//		List<BuildingEntity> buildingEntities = buildingRepositoryCustom.findAll(name, districtId);
+//		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
+//		for(BuildingEntity item : buildingEntities) {
+//			BuildingDTO building = new BuildingDTO();
+//			building.setName(item.getName());
+//			building.setNumberOfBasement(item.getNumberOfBasement());
+//			building.setAddress(item.getStreet()+" "+item.getWard());
+//			result.add(building);
+//		}
+//		
+//		return result;		
+//	}
+	@Override  //---------------------------using custom Jpa----------------------------------//
 	public List<BuildingDTO> findAlls(Map<String,Object> params, List<String> typeCode) {
 		BuildingSearchBuilder buildingSearchBuilder = buildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCode);
-		List<BuildingEntity> buildingEntities = buildingRepository.findAlls(buildingSearchBuilder);
+		List<BuildingEntity> buildingEntities = buildingRepositoryCustom.findAlls(buildingSearchBuilder);
+		//List<BuildingEntity> buildingEntities = buildingRepository.findAll();
 		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
 		for(BuildingEntity item : buildingEntities) {
 			BuildingDTO building = buildingDTOConverter.toBuildingDTO(item);
@@ -70,7 +76,7 @@ public class BuildingServiceImpl implements BuildingService {
 		DistrictEntity districtEntity = new DistrictEntity();
 		districtEntity.setId(buildingRequestDTO.getDistrictid());
 		buildingEntity.setDistrict(districtEntity);
-		buildingRepository.saveBuilding(buildingEntity);
+		buildingRepositoryCustom.saveBuilding(buildingEntity);
 	}
 	@Override
 	@Transactional
@@ -83,13 +89,32 @@ public class BuildingServiceImpl implements BuildingService {
 		DistrictEntity districtEntity = new DistrictEntity();
 		districtEntity.setId(buildingRequestDTO.getDistrictid());
 		buildingEntity.setDistrict(districtEntity);
-		buildingRepository.saveUpdateBuilding(buildingEntity);
+		buildingRepositoryCustom.saveUpdateBuilding(buildingEntity);
 	}
 	
 	@Override
 	@Transactional
 	public void deleteBuilding(Long id) {
-		buildingRepository.deleteBuildingRepo(id);
+		buildingRepositoryCustom.deleteBuildingRepo(id);
 	}
+
+	// using spring data Jpa
+	@Override
+	public void deleteBuildingById(Long id) {
+			buildingRepository.deleteById(id);	
+	}
+
+	@Override
+	public List<BuildingDTO> getAllBuilding() {
+		List<BuildingEntity> buildingEntities = buildingRepository.findAll();
+		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
+		for(BuildingEntity item : buildingEntities) {
+			BuildingDTO building = buildingDTOConverter.toBuildingDTO(item);
+			result.add(building);
+		}
+		
+		return result;		
+	}
+	
 	
 }

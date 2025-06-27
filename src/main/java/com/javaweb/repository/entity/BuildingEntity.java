@@ -37,28 +37,24 @@ public class BuildingEntity {
 //	@Column(name = "districtid")
 //	private Long districtid;
 	
-	@Column(name = "managerName")
-	private String managerName;
+	@Column(name = "managername")
+	private String managername;
 	
-	@Column(name = "managerPhoneNumber")
-	private String managerPhoneNumber;
+	@Column(name = "managerphonenumber")
+	private String managerphonenumber;
 	
-	@Column(name = "floorArea")
-	private Long floorArea;
+	@Column(name = "floorarea")
+	private Long floorarea;
 	
-	@Column(name = "emptyArea")
-	private String emptyArea;
 	
-	@Column(name = "rentPrice")
+	@Column(name = "rentprice")
 	private Long rentPrice;
 	
-	@Column(name = "serviceFee")
+	@Column(name = "servicefee")
 	private String serviceFee;
 	
-	@Column(name = "brokerageFee")
-	private Long brokerageFee;
-	
-	
+	@Column(name = "brokeragefee")
+	private Long brokeragefee;
 	@ManyToOne
 	@JoinColumn(name = "districtid") // tạo 1 cột có tên districtID
 	private DistrictEntity district;
@@ -81,10 +77,6 @@ public class BuildingEntity {
 	public void setAreaEntities(List<RentAreaEntity> areaEntities) {
 		this.areaEntities = areaEntities;
 	}
-	
-	
-	
-	
 	
 	public Long getId() {
 		return id;
@@ -123,28 +115,22 @@ public class BuildingEntity {
 //		this.districtid = districtid;
 //	}
 	public String getManagerName() {
-		return managerName;
+		return managername;
 	}
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
+	public void setManagerName(String managername) {
+		this.managername = managername;
 	}
 	public String getManagerPhoneNumber() {
-		return managerPhoneNumber;
+		return managerphonenumber;
 	}
 	public void setManagerPhoneNumber(String managerPhoneNumber) {
-		this.managerPhoneNumber = managerPhoneNumber;
+		this.managerphonenumber = managerPhoneNumber;
 	}
 	public Long getFloorArea() {
-		return floorArea;
+		return floorarea;
 	}
 	public void setFloorArea(Long floorArea) {
-		this.floorArea = floorArea;
-	}
-	public String getEmptyArea() {
-		return emptyArea;
-	}
-	public void setEmptyArea(String emptyArea) {
-		this.emptyArea = emptyArea;
+		this.floorarea = floorArea;
 	}
 	public Long getRentPrice() {
 		return rentPrice;
@@ -158,12 +144,11 @@ public class BuildingEntity {
 	public void setServiceFee(String serviceFee) {
 		this.serviceFee = serviceFee;
 	}
-
-	public Long getBrokerageFee() {
-		return brokerageFee;
+	public Long getBrokeragefee() {
+		return brokeragefee;
 	}
-	public void setBrokerageFee(Long brokerageFee) {
-		this.brokerageFee = brokerageFee;
+	public void setBrokeragefee(Long brokeragefee) {
+		this.brokeragefee = brokeragefee;
 	}
 
 
