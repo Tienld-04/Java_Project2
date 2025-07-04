@@ -129,4 +129,39 @@ public class BuildingServiceImpl implements BuildingService {
 		buildingRepository.deleteByIdIn(ids);
 		
 	}
+	
+	@Override
+	public List<BuildingDTO> findByName(String s){
+		List<BuildingEntity> buildingEntities = buildingRepository.findByNameContaining(s);
+		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
+		for(BuildingEntity item : buildingEntities) {
+			BuildingDTO building = buildingDTOConverter.toBuildingDTO(item);
+			result.add(building);
+		}
+		
+		return result;		
+	}
+	
+	@Override
+	public List<BuildingDTO> findByNameAndStreet(String name, String street){
+		List<BuildingEntity> buildingEntities = buildingRepository.findByNameContainingAndStreet(name, street);
+		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
+		for(BuildingEntity item : buildingEntities) {
+			BuildingDTO building = buildingDTOConverter.toBuildingDTO(item);
+			result.add(building);
+		}
+		
+		return result;		
+	}
+	@Override
+	public void saveBuilding(BuildingRequestDTO buildingRequestDTO) {
+		BuildingEntity buildingEntity = buildingRepository.findById(buildingRequestDTO.getId()).get();
+		buildingEntity.setName(buildingRequestDTO.getName());
+		buildingEntity.setWard(buildingRequestDTO.getWard());
+		buildingEntity.setStreet(buildingRequestDTO.getStreet());
+		DistrictEntity districtEntity = new DistrictEntity();
+		districtEntity.setId(buildingRequestDTO.getDistrictid());
+		buildingEntity.setDistrict(districtEntity);
+		buildingRepository.save(buildingEntity);
+	}
 }

@@ -17,5 +17,8 @@ public interface BuildingService {
 	void deleteBuildingByIds(Long[] ids);
 	List<BuildingDTO> getAllBuilding();
 	BuildingDTO getBuildingById(Long id);
+	List<BuildingDTO> findByName(String s);
+	List<BuildingDTO> findByNameAndStreet(String name, String street);
+	void saveBuilding(BuildingRequestDTO buildingRequestDTO);
 
 }

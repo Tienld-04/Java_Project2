@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javaweb.model.BuildingDTO;
+import com.javaweb.model.BuildingRequestDTO;
 import com.javaweb.service.BuildingService;
 import java.util.List;
 @RestController
@@ -36,4 +39,20 @@ public class BuildingAPI {
 		buildingService.deleteBuildingByIds(ids);
 	}
 	
+	@GetMapping("/api/buildingSearch/{name}")
+	public List<BuildingDTO> findByNameBuilding(@PathVariable String name){
+		List<BuildingDTO> result = buildingService.findByName(name);
+		return result;
+	}
+	
+	@GetMapping("/api/buildingsSearch/{name}/{street}")
+	public List<BuildingDTO> findByNameBuilding(@PathVariable String name, @PathVariable String street){
+		List<BuildingDTO> result = buildingService.findByNameAndStreet(name, street);
+		return result;
+	}
+	
+	@PutMapping("/api/building/")
+	public void updateBuilding(@RequestBody BuildingRequestDTO buildingRequestDTO) {
+		buildingService.saveBuilding(buildingRequestDTO);
+	}
 }
