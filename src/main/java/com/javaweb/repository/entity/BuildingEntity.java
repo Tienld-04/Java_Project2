@@ -1,6 +1,83 @@
 package com.javaweb.repository.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "building")
 public class BuildingEntity {
+	
+	@Id // đánh dấu khóa chính
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // tự  động tăng dần
+	private Long id;
+	
+	@Column(name = "name")
+	private String name;
+	
+	@Column(name = "numberofbasement")
+	private Integer numberOfBasement;
+	
+	@Column(name = "ward")
+	private String ward;
+	
+	@Column(name = "street")
+	private String street;
+	
+//	@Column(name = "districtid")
+//	private Long districtid;
+	
+	@Column(name = "managername")
+	private String managername;
+	
+	@Column(name = "managerphonenumber")
+	private String managerphonenumber;
+	
+	@Column(name = "floorarea")
+	private Long floorarea;
+	
+	
+	@Column(name = "rentprice")
+	private Long rentPrice;
+	
+	@Column(name = "servicefee")
+	private String serviceFee;
+	
+	@Column(name = "brokeragefee")
+	private Long brokeragefee;
+	@ManyToOne
+	@JoinColumn(name = "districtid") // tạo 1 cột có tên districtID
+	private DistrictEntity district;
+	
+	@OneToMany(mappedBy = "building", fetch = FetchType.LAZY)
+	private List<RentAreaEntity> areaEntities = new ArrayList<>();
+	
+	
+	public DistrictEntity getDistrict() {
+		return district;
+	}
+	public void setDistrict(DistrictEntity district) {
+		this.district = district;
+	}
+	
+	
+	public List<RentAreaEntity> getAreaEntities() {
+		return areaEntities;
+	}
+	public void setAreaEntities(List<RentAreaEntity> areaEntities) {
+		this.areaEntities = areaEntities;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -31,35 +108,29 @@ public class BuildingEntity {
 	public void setStreet(String street) {
 		this.street = street;
 	}
-	public Long getDistrictid() {
-		return districtid;
-	}
-	public void setDistrictid(Long districtid) {
-		this.districtid = districtid;
-	}
+//	public Long getDistrictid() {
+//		return districtid;
+//	}
+//	public void setDistrictid(Long districtid) {
+//		this.districtid = districtid;
+//	}
 	public String getManagerName() {
-		return managerName;
+		return managername;
 	}
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
+	public void setManagerName(String managername) {
+		this.managername = managername;
 	}
 	public String getManagerPhoneNumber() {
-		return managerPhoneNumber;
+		return managerphonenumber;
 	}
 	public void setManagerPhoneNumber(String managerPhoneNumber) {
-		this.managerPhoneNumber = managerPhoneNumber;
+		this.managerphonenumber = managerPhoneNumber;
 	}
 	public Long getFloorArea() {
-		return floorArea;
+		return floorarea;
 	}
 	public void setFloorArea(Long floorArea) {
-		this.floorArea = floorArea;
-	}
-	public String getEmptyArea() {
-		return emptyArea;
-	}
-	public void setEmptyArea(String emptyArea) {
-		this.emptyArea = emptyArea;
+		this.floorarea = floorArea;
 	}
 	public Long getRentPrice() {
 		return rentPrice;
@@ -73,27 +144,14 @@ public class BuildingEntity {
 	public void setServiceFee(String serviceFee) {
 		this.serviceFee = serviceFee;
 	}
-
-	public Long getBrokerageFee() {
-		return brokerageFee;
+	public Long getBrokeragefee() {
+		return brokeragefee;
 	}
-	public void setBrokerageFee(Long brokerageFee) {
-		this.brokerageFee = brokerageFee;
+	public void setBrokeragefee(Long brokeragefee) {
+		this.brokeragefee = brokeragefee;
 	}
 
-	private Long id;
-	private String name;
-	private Integer numberOfBasement;
-	private String ward;
-	private String street;
-	private Long districtid;
-	private String managerName;
-	private String managerPhoneNumber;
-	private Long floorArea;
-	private String emptyArea;
-	private Long rentPrice;
-	private String serviceFee;
-	private Long brokerageFee;
+
 	
 	
 	

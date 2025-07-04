@@ -1,4 +1,5 @@
 package com.javaweb.utils;
+// tien ich
 import java.sql.Connection;
 import java.sql.DriverManager;
 public class ConnectionJDBCUtil {
