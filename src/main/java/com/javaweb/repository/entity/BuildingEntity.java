@@ -55,6 +55,7 @@ public class BuildingEntity {
 	
 	@Column(name = "brokeragefee")
 	private Long brokeragefee;
+	
 	@ManyToOne
 	@JoinColumn(name = "districtid") // tạo 1 cột có tên districtID
 	private DistrictEntity district;

@@ -20,5 +20,6 @@ public interface BuildingService {
 	List<BuildingDTO> findByName(String s);
 	List<BuildingDTO> findByNameAndStreet(String name, String street);
 	void saveBuilding(BuildingRequestDTO buildingRequestDTO);
+	void insertBuilding(BuildingRequestDTO buildingRequestDTO);
 
 }

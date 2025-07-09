@@ -153,7 +153,7 @@ public class JDBCBuildingRepositoryImpl implements BuildingRepositoryCustom {
 		Long rentPriceTo = buildingSearchBuilder.getRentPriceTo();
 		Long rentPriceFrom = buildingSearchBuilder.getRentPriceFrom();
 		if(rentPriceTo != null || rentPriceFrom != null){
-			if(rentAreaFrom != null) {
+			if(rentPriceFrom != null) {
 				where.append(" and b.rentprice >= " + rentPriceFrom);
 				
 			}

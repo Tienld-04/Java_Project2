@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.javaweb.model.BuildingDTO;
+import com.javaweb.model.BuildingRequestDTO;
 import com.javaweb.repository.DistrictRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.entity.BuildingEntity;
@@ -36,4 +37,17 @@ public class BuildingDTOConverter {
 		building.setRentArea(listRentArea);
 		return building;
 	}
+	
+	public BuildingEntity toBuildingEntity(BuildingRequestDTO buildingRequestDTO) {
+		BuildingEntity buildingEntity = new BuildingEntity();
+		buildingEntity.setId(buildingRequestDTO.getId());
+		buildingEntity.setName(buildingRequestDTO.getName());
+		buildingEntity.setWard(buildingRequestDTO.getWard());
+		buildingEntity.setStreet(buildingRequestDTO.getStreet());
+		DistrictEntity districtEntity = new DistrictEntity();
+		districtEntity.setId(buildingRequestDTO.getDistrictid());
+		buildingEntity.setDistrict(districtEntity);
+		return buildingEntity;
+	}
+	
 }

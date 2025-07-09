@@ -164,4 +164,11 @@ public class BuildingServiceImpl implements BuildingService {
 		buildingEntity.setDistrict(districtEntity);
 		buildingRepository.save(buildingEntity);
 	}
+	
+	@Override
+	public void insertBuilding(BuildingRequestDTO buildingRequestDTO) {
+		BuildingEntity buildingEntity = new BuildingEntity();
+		buildingEntity = buildingDTOConverter.toBuildingEntity(buildingRequestDTO);
+		buildingRepository.save(buildingEntity);
+	}
 }
